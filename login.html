@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Botographs – Login</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <main class="auth-container">
+    <h1>Botographs</h1>
+    <div id="firebaseui-auth-container"></div>
+  </main>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
+  <!-- FirebaseUI (Host your own copy or CDN) -->
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="https://cdn.firebase.com/libs/firebaseui/6.0.2/firebaseui.css"
+  />
+  <script src="https://cdn.firebase.com/libs/firebaseui/6.0.2/firebaseui.js"></script>
+
+  <script>
+    // 1. Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
+      authDomain: "photography-website-8654f.firebaseapp.com",
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    // 2. Configure FirebaseUI
+    const ui = new firebaseui.auth.AuthUI(firebase.auth());
+    ui.start("#firebaseui-auth-container", {
+      signInOptions: [
+        firebase.auth.EmailAuthProvider.PROVIDER_ID
+      ],
+      callbacks: {
+        signInSuccessWithAuthResult: () => {
+          // Redirect to the gallery
+          window.location.href = "index.html";
+          return false;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,126 +1,114 @@
-<!-- admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="/style.css" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Botographs – Admin</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <h1>
-    Admin
-  </h1>
-  <div id="login-form">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-  </div>
+  <header>
+    <h1>Admin Dashboard</h1>
+    <button id="logout">Logout</button>
+  </header>
+  <main>
+    <div id="upload-section">
+      <input type="file" id="photo" accept="image/*"/>
+      <input type="text" id="caption" placeholder="Caption"/>
+      <button id="upload-btn">Upload Photo</button>
+      <p id="status"></p>
+    </div>
+  </main>
 
-  <div id="upload-section" style="display:none">
-    <input type="file" id="photo">
-    <input type="text" id="caption" placeholder="Caption">
-    <button onclick="uploadPhoto()">Upload Photo</button>
-    <button onclick="logout()">Logout</button>
-    <br /><br />
-    <a href="index.html"><button>Back to Site</button></a>
-  </div>
-
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-storage-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore-compat.js"></script>
 
-  <script>        
+  <script>
+    // 1. Firebase init
     const firebaseConfig = {
-        apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
-        authDomain: "photography-website-8654f.firebaseapp.com",
-        projectId: "photography-website-8654f",
-        storageBucket: "photography-website-8654f.appspot.com",
+      apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
+      authDomain: "photography-website-8654f.firebaseapp.com",
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    const db = firebase.firestore();
-    const storage = firebase.storage();
 
+    // 2. Protect admin page
     auth.onAuthStateChanged(user => {
-      if (user) {
-        document.getElementById("login-form").style.display = "none";
-        document.getElementById("upload-section").style.display = "block";
+      if (!user) {
+        window.location.href = 'login.html';
       }
     });
 
-    function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      auth.signInWithEmailAndPassword(email, password)
-        .catch(error => alert(error.message));
-    }
+    document.getElementById('logout').onclick = () =>
+      auth.signOut().then(() => window.location.href = 'login.html');
 
-    function logout() {
-      auth.signOut().then(() => {
-        location.reload();
-      });
-    }
-
-    function uploadPhoto() {
-      const file = document.getElementById("photo").files[0];
-      const caption = document.getElementById("caption").value;
-
-      if (!file) {
-        alert("Please select a file.");
+    // 3. GitHub upload logic
+    document.getElementById('upload-btn').onclick = async () => {
+      const fileEl = document.getElementById('photo');
+      const caption = document.getElementById('caption').value.trim();
+      const status = document.getElementById('status');
+      if (!fileEl.files.length) {
+        status.textContent = 'Select a photo first.';
         return;
       }
-
+      const file = fileEl.files[0];
       const reader = new FileReader();
-      reader.onloadend = function () {
-        const base64File = reader.result.split(',')[1]; // remove data URL header
+      reader.onload = async () => {
+        const content = reader.result.split(',')[1]; // base64
+        const repo = 'BaoNHoang/Botographs.github.io';
+        const path = `photos/${file.name}`;
+        const token = prompt('Enter your GitHub Personal Access Token'); 
+        try {
+          // 3a. Upload the file
+          let res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `token ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              message: `Add photo ${file.name}`,
+              content,
+              branch: 'main'
+            })
+          });
+          const json = await res.json();
+          if (!json.content) throw new Error(JSON.stringify(json));
 
-        const repo = "BaoNHoang/Botographs.github.io";
-        const filePath = `/photos/${file.name}`;
-        const commitMessage = `Add photo ${file.name}`;
-        const content = base64File;
-        const token = "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"; // <-- Use environment variable in production!
+          // 3b. Update the manifest
+          const manifestUrl = `https://api.github.com/repos/${repo}/contents/photos/photos.json`;
+          // 1) fetch existing manifest (to get sha)
+          let manRes = await fetch(manifestUrl);
+          let manJson = await manRes.json();
+          const photos = JSON.parse(atob(manJson.content));
+          photos.push({
+            url: `https://raw.githubusercontent.com/${repo}/main/${path}`,
+            caption
+          });
+          // 2) push updated manifest
+          await fetch(manifestUrl, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `token ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              message: `Update manifest with ${file.name}`,
+              content: btoa(JSON.stringify(photos, null, 2)),
+              sha: manJson.sha,
+              branch: 'main'
+            })
+          });
 
-        fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
-          method: "PUT",
-          headers: {
-            "Authorization": `token ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            message: commitMessage,
-            content: content,
-            branch: "main"
-          }),
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.content && data.content.sha) {
-            const imageUrl = `https://raw.githubusercontent.com/${repo}/main/${filePath}`;
-            db.collection("photos").add({ url: imageUrl, caption })
-              .then(() => {
-                alert("Photo uploaded successfully!");
-              })
-              .catch(error => {
-                console.error(error);
-                alert("Error uploading photo metadata to Firestore");
-              });
-          } else {
-            console.error(data);
-            alert("Error uploading image to GitHub");
-          }
-        })
-        .catch(error => {
-          console.error("Upload error:", error);
-          alert("GitHub upload failed");
-        });
+          status.textContent = 'Upload successful!';
+        } catch (e) {
+          console.error(e);
+          status.textContent = 'Upload failed. See console.';
+        }
       };
-
       reader.readAsDataURL(file);
-    }
-</script>
-
+    };
+  </script>
 </body>
 </html>
-
