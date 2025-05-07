@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Botographs</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
     <h1>Botographs</h1>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="admin.html">Admin</a>
-      <button id="logout">Logout</button>
-    </nav>
   </header>
-  <main>
-    <div id="gallery" class="gallery-grid"></div>
+
+  <main class="panel text-center" id="login-panel">
+    <h2>Sign In</h2>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit" id="login-btn">Login</button>
+      <p id="error-msg" class="text-red hidden"></p>
+    </form>
   </main>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
 
@@ -32,32 +34,26 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // Protect this page: redirect to login if not signed in
+    // Redirect already-signed-in users
     auth.onAuthStateChanged(user => {
-      if (!user) {
-        window.location.href = 'login.html';
-      } else {
-        loadGallery();
+      if (user) {
+        window.location.href = 'main.html';
       }
     });
 
-    document.getElementById('logout').onclick = () => {
-      auth.signOut().then(() => window.location.reload());
-    };
-
-    // Fetch the photo manifest from GitHub and render
-    async function loadGallery() {
-      const resp = await fetch('https://raw.githubusercontent.com/BaoNHoang/Botographs.github.io/main/photos/photos.json');
-      const photos = await resp.json();
-      const gallery = document.getElementById('gallery');
-      photos.forEach(p => {
-        const img = document.createElement('img');
-        img.src = p.url;
-        img.alt = p.caption || '';
-        img.classList.add('gallery-item');
-        gallery.appendChild(img);
-      });
-    }
+    // Handle login form submission
+    document.getElementById('login-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => window.location.href = 'main.html')
+        .catch(err => {
+          const errEl = document.getElementById('error-msg');
+          errEl.textContent = err.message;
+          errEl.classList.remove('hidden');
+        });
+    });
   </script>
 </body>
 </html>

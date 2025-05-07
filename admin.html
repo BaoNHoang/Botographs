@@ -7,108 +7,74 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header>
-    <h1>Admin Dashboard</h1>
-    <button id="logout">Logout</button>
-  </header>
-  <main>
-    <div id="upload-section">
-      <input type="file" id="photo" accept="image/*"/>
-      <input type="text" id="caption" placeholder="Caption"/>
-      <button id="upload-btn">Upload Photo</button>
-      <p id="status"></p>
-    </div>
+    <header>
+        <h1 class="site-title">Admin</h1>
+        <div class="nav-buttons">
+          <a href="main.html"><button>Home</button></a>
+          <a href="admin.html"><button>Admin</button></a>
+        </div>
+        <button id="logout-btn">Logout</button>
+      </header>
+      <main>
+  <main class="panel">
+    <input type="file" id="photo" accept="image/*"/>
+    <input type="text" id="caption" placeholder="Caption"/>
+    <button id="upload-btn">Upload Photo</button>
+    <p id="status"></p>
   </main>
 
-  <!-- Firebase SDK -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore-compat.js"></script>
 
   <script>
-    // 1. Firebase init
+    // Initialize Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
       authDomain: "photography-website-8654f.firebaseapp.com",
+      projectId: "photography-website-8654f",
+      storageBucket: "photography-website-8654f.appspot.com"
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const storage = firebase.storage();
+    const db = firebase.firestore();
 
-    // 2. Protect admin page
+    // Check authentication state
     auth.onAuthStateChanged(user => {
       if (!user) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
       }
     });
 
-    document.getElementById('logout').onclick = () =>
-      auth.signOut().then(() => window.location.href = 'login.html');
+    // Handle logout
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      auth.signOut().then(() => window.location.href = 'index.html');
+    });
 
-    // 3. GitHub upload logic
-    document.getElementById('upload-btn').onclick = async () => {
-      const fileEl = document.getElementById('photo');
-      const caption = document.getElementById('caption').value.trim();
-      const status = document.getElementById('status');
-      if (!fileEl.files.length) {
-        status.textContent = 'Select a photo first.';
+    // Handle photo upload
+    document.getElementById('upload-btn').addEventListener('click', () => {
+      const file = document.getElementById('photo').files[0];
+      const caption = document.getElementById('caption').value;
+      const statusEl = document.getElementById('status');
+
+      if (!file) {
+        statusEl.textContent = 'Please select a photo.';
         return;
       }
-      const file = fileEl.files[0];
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const content = reader.result.split(',')[1]; // base64
-        const repo = 'BaoNHoang/Botographs.github.io';
-        const path = `photos/${file.name}`;
-        const token = prompt('Enter your GitHub Personal Access Token'); 
-        try {
-          // 3a. Upload the file
-          let res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
-            method: 'PUT',
-            headers: {
-              'Authorization': `token ${token}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              message: `Add photo ${file.name}`,
-              content,
-              branch: 'main'
-            })
-          });
-          const json = await res.json();
-          if (!json.content) throw new Error(JSON.stringify(json));
 
-          // 3b. Update the manifest
-          const manifestUrl = `https://api.github.com/repos/${repo}/contents/photos/photos.json`;
-          // 1) fetch existing manifest (to get sha)
-          let manRes = await fetch(manifestUrl);
-          let manJson = await manRes.json();
-          const photos = JSON.parse(atob(manJson.content));
-          photos.push({
-            url: `https://raw.githubusercontent.com/${repo}/main/${path}`,
-            caption
-          });
-          // 2) push updated manifest
-          await fetch(manifestUrl, {
-            method: 'PUT',
-            headers: {
-              'Authorization': `token ${token}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              message: `Update manifest with ${file.name}`,
-              content: btoa(JSON.stringify(photos, null, 2)),
-              sha: manJson.sha,
-              branch: 'main'
-            })
-          });
-
-          status.textContent = 'Upload successful!';
-        } catch (e) {
-          console.error(e);
-          status.textContent = 'Upload failed. See console.';
-        }
-      };
-      reader.readAsDataURL(file);
-    };
+      const storageRef = storage.ref('photos/' + file.name);
+      storageRef.put(file).then(snapshot => {
+        snapshot.ref.getDownloadURL().then(url => {
+          db.collection("photos").add({ url, caption });
+          statusEl.textContent = 'Photo uploaded successfully!';
+        });
+      }).catch(err => {
+        statusEl.textContent = 'Upload failed: ' + err.message;
+      });
+    });
   </script>
 </body>
 </html>
