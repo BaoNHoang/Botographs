@@ -79,7 +79,7 @@
         const filePath = `photos/${file.name}`;
         const commitMessage = `Add photo ${file.name}`;
         const content = base64File;
-        const token = "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"; // <-- Use environment variable in production!
+        const token = "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"; // <-- Use environment variable in production!
 
         fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
           method: "PUT",
