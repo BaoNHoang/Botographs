@@ -61,7 +61,7 @@
         location.reload();
       });
     }
-    
+
     function uploadPhoto() {
       const file = document.getElementById("photo").files[0];
       const caption = document.getElementById("caption").value;
@@ -79,7 +79,7 @@
         const filePath = `photos/${file.name}`;
         const commitMessage = `Add photo ${file.name}`;
         const content = base64File;
-        const token = "YOUR_GITHUB_PAT"; // <-- Use environment variable in production!
+        const token = "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"; // <-- Use environment variable in production!
 
         fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
           method: "PUT",
