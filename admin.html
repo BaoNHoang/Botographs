@@ -1,1 +1,79 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+
+  <div id="login-form">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div id="upload-section" style="display:none">
+    <input type="file" id="photo">
+    <input type="text" id="caption" placeholder="Caption">
+    <button onclick="uploadPhoto()">Upload Photo</button>
+    <button onclick="logout()">Logout</button>
+    <br /><br />
+    <a href="index.html"><button>Back to Site</button></a>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore-compat.js"></script>
+
+  <script>        
+    const firebaseConfig = {
+        apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
+        authDomain: "photography-website-8654f.firebaseapp.com",
+        projectId: "photography-website-8654f",
+        storageBucket: "photography-website-8654f.appspot.com",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("upload-section").style.display = "block";
+      }
+    });
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      auth.signInWithEmailAndPassword(email, password)
+        .catch(error => alert(error.message));
+    }
+
+    function logout() {
+      auth.signOut().then(() => {
+        location.reload();
+      });
+    }
+
+    function uploadPhoto() {
+      const file = document.getElementById("photo").files[0];
+      const caption = document.getElementById("caption").value;
+      const storageRef = storage.ref('photos/' + file.name);
+      storageRef.put(file).then(snapshot => {
+        snapshot.ref.getDownloadURL().then(url => {
+          db.collection("photos").add({ url, caption });
+          alert("Photo uploaded!");
+        });
+      }).catch(err => alert(err.message));
+    }
+  </script>
+</body>
+</html>
 
