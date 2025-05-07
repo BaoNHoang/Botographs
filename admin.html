@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <h1>Admin</h1>
@@ -76,7 +76,7 @@
         const base64File = reader.result.split(',')[1]; // remove data URL header
 
         const repo = "BaoNHoang/Botographs.github.io";
-        const filePath = `photos/${file.name}`;
+        const filePath = `/photos/${file.name}`;
         const commitMessage = `Add photo ${file.name}`;
         const content = base64File;
         const token = "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"; // <-- Use environment variable in production!
