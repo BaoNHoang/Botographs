@@ -61,19 +61,65 @@
         location.reload();
       });
     }
-
+    
     function uploadPhoto() {
       const file = document.getElementById("photo").files[0];
       const caption = document.getElementById("caption").value;
-      const storageRef = storage.ref('photos/' + file.name);
-      storageRef.put(file).then(snapshot => {
-        snapshot.ref.getDownloadURL().then(url => {
-          db.collection("photos").add({ url, caption });
-          alert("Photo uploaded!");
+
+      if (!file) {
+        alert("Please select a file.");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const base64File = reader.result.split(',')[1]; // remove data URL header
+
+        const repo = "BaoNHoang/Botographs.github.io";
+        const filePath = `photos/${file.name}`;
+        const commitMessage = `Add photo ${file.name}`;
+        const content = base64File;
+        const token = "YOUR_GITHUB_PAT"; // <-- Use environment variable in production!
+
+        fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+          method: "PUT",
+          headers: {
+            "Authorization": `token ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: commitMessage,
+            content: content,
+            branch: "main"
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.content && data.content.sha) {
+            const imageUrl = `https://raw.githubusercontent.com/${repo}/main/${filePath}`;
+            db.collection("photos").add({ url: imageUrl, caption })
+              .then(() => {
+                alert("Photo uploaded successfully!");
+              })
+              .catch(error => {
+                console.error(error);
+                alert("Error uploading photo metadata to Firestore");
+              });
+          } else {
+            console.error(data);
+            alert("Error uploading image to GitHub");
+          }
+        })
+        .catch(error => {
+          console.error("Upload error:", error);
+          alert("GitHub upload failed");
         });
-      }).catch(err => alert(err.message));
+      };
+
+      reader.readAsDataURL(file);
     }
-  </script>
+</script>
+
 </body>
 </html>
 
