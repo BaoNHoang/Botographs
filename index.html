@@ -92,8 +92,13 @@
         // Hide logout button
         logoutBtn.style.display = 'none';
 
-        // Redirect if on a protected page
-        if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') {
+        const path = window.location.pathname;
+
+        // Normalize to just filename or root
+        const isRoot = path.endsWith('/') || path.endsWith('/index.html') || path.match(/\/[^/]+\/?(index\.html)?$/);
+
+        // Redirect only if NOT on the main page
+        if (!isRoot) {
           window.location.href = 'index.html';
         }
       }
