@@ -6,7 +6,7 @@
   <title>Login</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
-<body>
+<body style="display: none;" id="body">
   <header>
     <h1>Botographs</h1>
   </header>
@@ -26,7 +26,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
 
   <script>
-    // Initialize Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
       authDomain: "photography-website-8654f.firebaseapp.com",
@@ -34,18 +33,19 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // Redirect already-signed-in users
     auth.onAuthStateChanged(user => {
       if (user) {
         window.location.href = 'admin.html';
+      } else {
+        document.getElementById("body").style.display = "block";
       }
     });
 
-    // Handle login form submission
     document.getElementById('login-form').addEventListener('submit', e => {
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+
       auth.signInWithEmailAndPassword(email, password)
         .then(() => window.location.href = 'admin.html')
         .catch(err => {

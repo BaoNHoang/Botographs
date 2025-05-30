@@ -7,17 +7,17 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-    <header>
-        <h1 class="site-title">Admin</h1>
-        <div class="nav-buttons">
-          <a href="index.html"><button>Home</button></a>
-          <a href="admin.html"><button>Admin</button></a>
-        </div>
-        <div class ="top-right">
-        <button id="logout-btn">Logout</button>
-        </div>
-      </header>
-      <main>
+  <header>
+    <h1 class="site-title">Admin</h1>
+    <div class="nav-buttons">
+      <a href="index.html"><button>Home</button></a>
+      <a href="admin.html"><button>Admin</button></a>
+    </div>
+    <div class="top-right">
+      <button id="logout-btn">Logout</button>
+    </div>
+  </header>
+
   <main class="panel">
     <input type="file" id="photo" accept="image/*"/>
     <input type="text" id="caption" placeholder="Caption"/>
@@ -32,7 +32,6 @@
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore-compat.js"></script>
 
   <script>
-    // Initialize Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
       authDomain: "photography-website-8654f.firebaseapp.com",
@@ -44,19 +43,16 @@
     const storage = firebase.storage();
     const db = firebase.firestore();
 
-    // Check authentication state
     auth.onAuthStateChanged(user => {
       if (!user) {
-        window.location.href = 'index.html';
+        window.location.href = 'signin.html';
       }
     });
 
-    // Handle logout
     document.getElementById('logout-btn').addEventListener('click', () => {
-      auth.signOut().then(() => window.location.href = 'index.html');
+      auth.signOut().then(() => window.location.href = 'signin.html');
     });
 
-    // Handle photo upload
     document.getElementById('upload-btn').addEventListener('click', () => {
       const file = document.getElementById('photo').files[0];
       const caption = document.getElementById('caption').value;

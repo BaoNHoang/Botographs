@@ -18,138 +18,73 @@
     </div>
   </header>
 
-  <!-- Video Background -->
   <video autoplay muted id="myVideo" playsinline>
     <source type="video/mp4">
     Your browser does not support the video tag.
   </video>
-  
-<main class="main-content">
-  <div class="about-section">
-    <h1>About Me</h1>
-    <p>
+
+  <main class="main-content">
+    <div class="about-section">
+      <h1>About Me</h1>
       My name is Bao Hoang and I am currently a college student pursuing a degree in Computer Science with a deep passion for photography and videography.
       What started as a hobby has grown into a creative outlet that allows me to capture the world through my lens.
       My goal is to share captivating stories and visuals with both national and international audiences.
       Whether it's through still images or cinematic motion, I strive to create content that connects and inspires.
     </p>
+      <div class="section-columns">
+        <div>
+          <h2>Gear</h2>
+          <ul class="gear-list">
+            <h3>Camera</h3>
+            <li>Canon R6 MKII</li>
+            <h3>Lenses</h3>
+            <li>Canon 50mm f/1.4</li>
+            <li>Canon 24–105mm f/4</li>
+            <li>Canon 28–70mm f/2.8</li>
+          </ul>
+        </div>
 
-    <div class="section-columns">
-      <div>
-        <h2>Gear</h2>
-        <ul class="gear-list">
-        <h3>Camera</h3>
-          <li>Canon R6 MKII</li>
-        <h3>Lenses</h3>
-          <li>Canon 50mm f/1.4</li>
-          <li>Canon 24–105mm f/4</li>
-          <li>Canon 28–70mm f/2.8</li>
-        </ul>
-      </div>
-
-      <div>
-        <h2>Contact</h2>
-        <ul class="contact-list-mail">
-        <h3>Email</h3>
-          <li>bao.hoang.22@cnu.edu</li>
-          <li>bao12162003@gmail.com</li>
-        </ul>
-        <ul class="contact-list-social">
-        <h3>Social Media</h3>
-         <li>Instagram: _botographs_</li>
-          <li>Instagram: _baohoang_</li>
-        </ul>
+        <div>
+          <h2>Contact</h2>
+          <ul class="contact-list-mail">
+            <h3>Email</h3>
+            <li>bao.hoang.22@cnu.edu</li>
+            <li>bao12162003@gmail.com</li>
+          </ul>
+          <ul class="contact-list-social">
+            <h3>Social Media</h3>
+            <li>Instagram: _botographs_</li>
+            <li>Instagram: _baohoang_</li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
-</main>
-
-  <main>
-    <div id="gallery" class="gallery-grid"></div>
   </main>
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
+  <script src="scripts/firebase-init.js"></script>
 
+  <!-- Auth Handling -->
   <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
-      authDomain: "photography-website-8654f.firebaseapp.com",
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
     const logoutBtn = document.getElementById('logout-btn');
 
     auth.onAuthStateChanged(user => {
       if (user) {
-        // Show logout button
         logoutBtn.style.display = 'inline-block';
-        loadGallery();
+        loadGallery(); // implement this to show photos if needed
       } else {
-        // Hide logout button
         logoutBtn.style.display = 'none';
-
-        const path = window.location.pathname;
-
-        // Normalize to just filename or root
-        const isRoot = path.endsWith('/') || path.endsWith('/index.html') || path.match(/\/[^/]+\/?(index\.html)?$/);
-
-        // Redirect only if NOT on the main page
-        if (!isRoot) {
-          window.location.href = 'index.html';
-        }
       }
     });
 
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => {
-        auth.signOut().then(() => window.location.href = 'index.html');
-      });
-    }
-
-    function loadGallery() {
-      // Gallery logic goes here
-    }
+    logoutBtn.addEventListener('click', () => {
+      auth.signOut().then(() => window.location.href = 'index.html');
+    });
   </script>
 
   <!-- Video logic -->
-  <script>
-    const videoSources = [
-      'videos/BahamaDocks.mp4',
-      'videos/BahamBench.mp4',
-      'videos/BlueOcean.mp4',
-      'videos/ShipFront.mp4'
-    ];
-
-    const videoElement = document.getElementById('myVideo');
-    const sourceElement = videoElement.querySelector('source');
-
-    function getNextRandomVideo() {
-      const lastPlayedIndex = parseInt(sessionStorage.getItem('lastPlayedIndex'), 10);
-      let randomIndex;
-      do {
-        randomIndex = Math.floor(Math.random() * videoSources.length);
-      } while (randomIndex === lastPlayedIndex && videoSources.length > 1);
-
-      sessionStorage.setItem('lastPlayedIndex', randomIndex);
-      return videoSources[randomIndex];
-    }
-
-    function changeVideo() {
-      const nextVideo = getNextRandomVideo();
-      sourceElement.src = nextVideo;
-      videoElement.load();
-      videoElement.play();
-    }
-
-    function changeVideoOnLoad() {
-      changeVideo();
-    }
-
-    videoElement.addEventListener('ended', changeVideo);
-  </script>
+  <script src="scripts/video.js"></script>
 </body>
 </html>
