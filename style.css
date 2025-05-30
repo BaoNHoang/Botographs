@@ -198,17 +198,22 @@ footer {
   }
 
   .gear-list,
-  .contact-list {
+  .contact-list-mail,
+  .contact-list-social {
     list-style: none;
     padding-left: 0;
   }
 
   .gear-list li::before {
-    content: "📸 ";
+    content: "📸";
   }
 
-  .contact-list li::before {
-    content: "✉️ ";
+  .contact-list-mail li::before {
+    content: "✉️";
+  }
+
+  .contact-list-social li::before {
+    content: "📱";
   }
 
   .section-columns {
