@@ -1,9 +1,9 @@
 // scripts/index.js
 const videoSources = [
-  'videos/BahamaDocks.mp4',
-  'videos/BahamBench.mp4',
-  'videos/BlueOcean.mp4',
-  'videos/ShipFront.mp4'
+  'BahamaDocks.mp4',
+  'BahamBench.mp4',
+  'BlueOcean.mp4',
+  'ShipFront.mp4'
 ];
 
 function getNextRandomVideo() {
