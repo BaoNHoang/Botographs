@@ -1,4 +1,4 @@
-// scripts/index.js
+// scripts/video.js
 const videoSources = [
   'BahamaDocks.mp4',
   'BahamBench.mp4',
