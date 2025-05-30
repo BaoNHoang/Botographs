@@ -68,24 +68,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
   <script src="scripts/firebase-init.js"></script>
-
-  <!-- Auth Handling -->
-  <script>
-    const logoutBtn = document.getElementById('logout-btn');
-
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        logoutBtn.style.display = 'inline-block';
-        loadGallery(); // implement this to show photos if neededS
-      } else {
-        logoutBtn.style.display = 'none';
-      }
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      auth.signOut().then(() => window.location.href = 'index.html');
-    });
-  </script>
+  <script src="scripts/auth.js"></script>
 
   <!-- Video logic -->
   <script src="scripts/video.js"></script>

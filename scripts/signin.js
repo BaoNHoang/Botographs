@@ -12,3 +12,11 @@ document.getElementById('login-form').addEventListener('submit', e => {
       errorMsg.classList.remove('hidden');
     });
 });
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    window.location.href = 'admin.html';
+  } else {
+    document.getElementById("body").style.display = "block";
+  }
+  });

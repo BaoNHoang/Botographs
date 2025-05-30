@@ -30,49 +30,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-storage-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore-compat.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw",
-      authDomain: "photography-website-8654f.firebaseapp.com",
-      projectId: "photography-website-8654f",
-      storageBucket: "photography-website-8654f.appspot.com"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const storage = firebase.storage();
-    const db = firebase.firestore();
-
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        window.location.href = 'signin.html';
-      }
-    });
-
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      auth.signOut().then(() => window.location.href = 'signin.html');
-    });
-
-    document.getElementById('upload-btn').addEventListener('click', () => {
-      const file = document.getElementById('photo').files[0];
-      const caption = document.getElementById('caption').value;
-      const statusEl = document.getElementById('status');
-
-      if (!file) {
-        statusEl.textContent = 'Please select a photo.';
-        return;
-      }
-
-      const storageRef = storage.ref('photos/' + file.name);
-      storageRef.put(file).then(snapshot => {
-        snapshot.ref.getDownloadURL().then(url => {
-          db.collection("photos").add({ url, caption });
-          statusEl.textContent = 'Photo uploaded successfully!';
-        });
-      }).catch(err => {
-        statusEl.textContent = 'Upload failed: ' + err.message;
-      });
-    });
-  </script>
+  <script src="scripts/firebase-init.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/adminupload.js"></script>
 </body>
 </html>
