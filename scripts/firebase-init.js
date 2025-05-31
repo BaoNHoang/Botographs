@@ -1,6 +1,6 @@
 // scripts/firebase-init.js
 const firebaseConfig = {
-  apiKey: "${{ secrets.MAIN }}",
+  apiKey: "AIzaSyCAP8YNuORmIr4JY_1hbRNneCMsP6lHnSw", //Already Secured via Google
   authDomain: "photography-website-8654f.firebaseapp.com",
   projectId: "photography-website-8654f",
   storageBucket: "photography-website-8654f.appspot.com"
