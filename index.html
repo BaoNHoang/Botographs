@@ -1,76 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css"/>
-  <title>Botographs</title>
-  <meta name="description" content="A photography for Bao Hoang.">
-  <meta name="keywords" content="HTML, CSS">
-  <meta name="author" content="Bao Hoang">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Botographs | Bao Hoang Photography</title>
+
+  <meta name="description" content="Botographs is the photography and videography portfolio of Bao Hoang." />
+  <meta name="keywords" content="Bao Hoang, Botographs, Photography, Videography, Portfolio" />
+  <meta name="author" content="Bao Hoang" />
+
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-  <header>
-    <h1 class="site-title">Botographs</h1>
-    <div class="nav-buttons">
-      <a href="./"><button>Home</button></a>
-      <a href="signin.html"><button>Admin</button></a>
-    </div>
-    <div class="top-right">
-      <button id="logout-btn" style="display: none;">Logout</button>
-    </div>
+  <header class="site-header">
+    <a href="./" class="logo" aria-label="Botographs home">
+      <span class="logo-mark">B</span>
+      <span>Botographs</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="./">Home</a>
+      <a href="#work">Work</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#about">About</a>
+      <a href="#gear">Gear</a>
+      <a href="#contact">Contact</a>
+      <button id="logout-btn" class="logout-btn" style="display: none;">Logout</button>
+    </nav>
   </header>
 
-  <video autoplay muted id="myVideo" playsinline>
-    <source type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+  <main>
+    <section class="hero-section">
+      <div class="hero-bg"></div>
 
-  <main class="main-content">
-    <div class="about-section">
-      <h1>About Me</h1>
-      My name is Bao Hoang and I am currently a college student pursuing a degree in Computer Science with a passion for photography and videography.
-      What started as a hobby from school classes to now a creative outlet that allows me to capture the world through my lens.
-      My goal is to tell stories through visuals for both national and international audiences.
-      Whether it's through still images or cinematic films, I strive to create content that connects us all together.
-    </p>
-      <div class="section-columns">
-        <div>
-          <h2>Gear</h2>
-          <ul class="gear-list">
-            <h3>Camera</h3>
-            <li>Canon R6 MKII</li>
-            <h3>Lenses</h3>
-            <li>Canon 50mm f/1.4</li>
-            <li>Canon 24–105mm f/4</li>
-            <li>Canon 28–70mm f/2.8</li>
-          </ul>
-        </div>
+      <div class="hero-content">
+        <p class="eyebrow">Photography • Videography • Storytelling</p>
 
-        <div>
-          <h2>Contact</h2>
-          <ul class="contact-list-mail">
-            <h3>Email</h3>
-            <li>bao.hoang.22@cnu.edu</li>
-            <li>bao12162003@gmail.com</li>
-          </ul>
-          <ul class="contact-list-social">
-            <h3>Social Media</h3>
-            <li>Instagram: _botographs_</li>
-            <li>Instagram: _baohoang_</li>
-          </ul>
+        <h1>Capturing moments with a cinematic eye.</h1>
+
+        <p class="hero-text">
+          Botographs is the creative photography and videography portfolio of Bao Hoang,
+          built around portraits, lifestyle visuals, events, travel, and visual storytelling.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#work" class="primary-btn">View Portfolio</a>
+          <a href="#contact" class="secondary-btn">Contact Me</a>
         </div>
       </div>
-    </div>
+
+      <div class="hero-card">
+        <div class="profile-photo-wrap">
+          <img
+            src="images/bao-profile.jpg"
+            alt="Portrait of Bao Hoang"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+
+          <div class="image-placeholder">
+            Add Your Portrait Here
+            <span>images/bao-profile.jpg</span>
+          </div>
+        </div>
+
+        <div class="hero-card-info">
+          <h2>Bao Hoang</h2>
+          <p>Photographer & Videographer</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="work">
+      <div class="section-heading">
+        <p class="eyebrow">Featured Work</p>
+        <h2>Visual Stories</h2>
+      </div>
+
+      <div class="featured-grid">
+        <article class="featured-card large">
+          <img
+            src="images/featured-01.jpg"
+            alt="Featured photography image"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+
+          <div class="image-placeholder">
+            Featured Image 1
+            <span>images/featured-01.jpg</span>
+          </div>
+
+          <div class="featured-overlay">
+            <p>Gradutation</p>
+          </div>
+        </article>
+
+        <article class="featured-card">
+          <img
+            src="images/featured-02.jpg"
+            alt="Featured photography image"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+
+          <div class="image-placeholder">
+            Featured Image 2
+            <span>images/featured-02.jpg</span>
+          </div>
+
+          <div class="featured-overlay">
+            <p>Engagement</p>
+          </div>
+        </article>
+
+        <article class="featured-card">
+          <img
+            src="images/featured-03.jpg"
+            alt="Featured photography image"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+
+          <div class="image-placeholder">
+            Featured Image 3
+            <span>images/featured-03.jpg</span>
+          </div>
+
+          <div class="featured-overlay">
+            <p>Event</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section dark-section" id="gallery">
+      <div class="section-heading">
+        <p class="eyebrow">Gallery</p>
+        <h2>Portfolio Gallery</h2>
+      </div>
+
+      <div class="gallery-grid">
+        <article class="gallery-card">
+          <img src="images/gallery-01.jpg" alt="Gallery photo 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 01<span>images/gallery-01.jpg</span></div>
+        </article>
+
+        <article class="gallery-card">
+          <img src="images/gallery-02.jpg" alt="Gallery photo 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 02<span>images/gallery-02.jpg</span></div>
+        </article>
+
+        <article class="gallery-card">
+          <img src="images/gallery-03.jpg" alt="Gallery photo 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 03<span>images/gallery-03.jpg</span></div>
+        </article>
+
+        <article class="gallery-card">
+          <img src="images/gallery-04.jpg" alt="Gallery photo 4" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 04<span>images/gallery-04.jpg</span></div>
+        </article>
+
+        <article class="gallery-card">
+          <img src="images/gallery-05.jpg" alt="Gallery photo 5" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 05<span>images/gallery-05.jpg</span></div>
+        </article>
+
+        <article class="gallery-card">
+          <img src="images/gallery-06.jpg" alt="Gallery photo 6" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 06<span>images/gallery-06.jpg</span></div>
+        </article>
+
+        <article class="gallery-card">
+          <img src="images/gallery-07.jpg" alt="Gallery photo 7" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 07<span>images/gallery-07.jpg</span></div>
+        </article>
+
+        <article class="gallery-card">
+          <img src="images/gallery-08.jpg" alt="Gallery photo 8" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 08<span>images/gallery-08.jpg</span></div>
+        </article>
+
+        <article class="gallery-card">
+          <img src="images/gallery-09.jpg" alt="Gallery photo 9" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="image-placeholder">Gallery 09<span>images/gallery-09.jpg</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section about-section" id="about">
+      <div class="about-text">
+        <p class="eyebrow">About Me</p>
+        <h2>Behind the Lens</h2>
+
+        <p>
+          My name is Bao Hoang, and I am currently a college student pursuing a degree in
+          Computer Science with a passion for photography and videography.
+        </p>
+
+        <p>
+          What started as a hobby through school classes has grown into a creative outlet that
+          allows me to capture the world through my lens. My goal is to tell stories through
+          visuals for both national and international audiences.
+        </p>
+
+        <p>
+          Whether it is through still images or cinematic films, I strive to create content that
+          feels personal, emotional, and connected.
+        </p>
+      </div>
+
+      <div class="about-stats">
+        <div>
+          <h3>Portraits</h3>
+          <p>Clean, expressive, and personal images that focus on mood and identity.</p>
+        </div>
+
+        <div>
+          <h3>Events</h3>
+          <p>Real moments captured with detail, timing, and atmosphere.</p>
+        </div>
+
+        <div>
+          <h3>Video</h3>
+          <p>Cinematic storytelling through movement, pacing, color, and composition.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section info-section">
+      <div class="info-card" id="gear">
+        <p class="eyebrow">Equipment</p>
+        <h2>Gear</h2>
+
+        <div class="info-list">
+          <h3>Camera</h3>
+          <p>Canon R6 MKII</p>
+
+          <h3>Lenses</h3>
+          <p>Canon 50mm f/1.4</p>
+          <p>Canon 24–105mm f/4</p>
+          <p>Canon 28–70mm f/2.8</p>
+        </div>
+      </div>
+
+      <div class="info-card" id="contact">
+        <p class="eyebrow">Contact</p>
+        <h2>Let’s Create</h2>
+
+        <div class="info-list">
+          <h3>Email</h3>
+          <p><a href="mailto:bao.hoang.22@cnu.edu">bao.hoang.22@cnu.edu</a></p>
+          <p><a href="mailto:bao.n.hoang03@gmail.com">bao.n.hoang03@gmail.com</a></p>
+
+          <h3>Social Media</h3>
+          <p>
+            Instagram:
+            <a href="https://www.instagram.com/_botographs_/" target="_blank" rel="noopener noreferrer">
+              _botographs_
+            </a>
+          </p>
+          <p>
+            Instagram:
+            <a href="https://www.instagram.com/_baohoang_/" target="_blank" rel="noopener noreferrer">
+              _baohoang_
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.3.1/firebase-auth-compat.js"></script>
-  <script src="scripts/firebase-init.js"></script>
-  <script src="scripts/auth.js"></script>
-
-  <!-- Video logic -->
-  <script src="scripts/video.js"></script>
+  <footer class="site-footer">
+    <p>© 2026 Botographs. Built by Bao Hoang.</p>
+  </footer>
 </body>
 </html>

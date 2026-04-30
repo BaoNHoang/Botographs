@@ -1,0 +1,22 @@
+Put your photography images in this folder.
+
+Recommended file names:
+
+hero-bg.jpg
+bao-profile.jpg
+
+featured-01.jpg
+featured-02.jpg
+featured-03.jpg
+
+gallery-01.jpg
+gallery-02.jpg
+gallery-03.jpg
+gallery-04.jpg
+gallery-05.jpg
+gallery-06.jpg
+gallery-07.jpg
+gallery-08.jpg
+gallery-09.jpg
+
+You can either rename your photos to match these names or change the image paths in index.html.
